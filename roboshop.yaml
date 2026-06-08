@@ -18,4 +18,4 @@
 
   - name:
     debug:
-      msg: " {{ ec2_output}}"
+      msg: " {{ ec2_output.stdout}}"
