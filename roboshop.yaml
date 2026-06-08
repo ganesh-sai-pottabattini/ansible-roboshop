@@ -25,7 +25,7 @@
 
   - name: create route 53 record
     debug: 
-      msg: " Instance Name : {{ item.item }} Private IP: {{ item.Instances[0].private_ip_address }} "
+      msg: " Instance Name : {{ item.item }} Private IP: {{ item.instances[0].private_ip_address }} "
     loop: "{{ ec2_output.results }}"
 
   - name: create R53 records
@@ -34,7 +34,7 @@
       zone: "{{ domain_name }}"
       record: "{{ item.item }}.{{ domain_name }}"
       type: A
-      value: "{{ item.Instances[0].private_ip_address }}"
+      value: "{{ item.instances[0].private_ip_address }}"
       ttl: 1
       overwrite: true # old records ni overwrite chesthundi
     loop: "{{ ec2_output.results }}"
@@ -47,7 +47,7 @@
       zone: "{{ domain_name }}"
       record: "{{ domain_name }}"
       type: A
-      value: "{{ item.Instances[0].public_ip_address }}"
+      value: "{{ item.instances[0].public_ip_address }}"
       ttl: 1
       overwrite: true # old records ni overwrite chesthundi
     loop: "{{ ec2_output.results }}"
