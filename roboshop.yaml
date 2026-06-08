@@ -19,8 +19,8 @@
 
   - name:
     debug:
-      msg: " {{ ec2_output.results }}"
-      #var: ec2_output.results
+      #msg: " {{ ec2_output.results }}"
+      var: ec2_output.results
 
   #- name: create route 53 record
   #  debug: 
