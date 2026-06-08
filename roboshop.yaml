@@ -21,7 +21,7 @@
       msg: " {{ ec2_output | to_nice_json }}"
       #var: ec2_output.results
 
-  - name: create route 53 record
-    debug: 
-      msg: " Instance Name : {{ item }}
-    loop: {{ ec2_output.results }}
+  #- name: create route 53 record
+  #  debug: 
+  #    msg: " Instance Name : {{ item }}
+  #  loop: {{ ec2_output.results }}
