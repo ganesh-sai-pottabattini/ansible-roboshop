@@ -1,0 +1,20 @@
+- name: Creating roboshop project using Ansible
+  hosts: local
+  connection: local
+  vars:
+    instances: [ "mongodb" ] #, "redis", "mysql", "rabbitmq" ]
+    image_id: ami-0220d79f3f480ecf5
+  tasks:
+  - name : Creating EC2 instances
+    loop: "{{ instances }}"
+    amazon.aws.ec2.instance:
+      name: "{{ item }}"
+      instance_type: t3.micro
+      security_groups: 
+      - "{{item}}"
+      - common
+    register: ec2_output
+
+  - name:
+    debug:
+      msg: " {{ ec2_output}}"
