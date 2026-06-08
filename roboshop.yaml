@@ -26,7 +26,7 @@
   - name: create route 53 record
     debug: 
       msg: " Instance Name : {{ item.item }} Private IP: {{ item.Instances[0].private_ip_address }} "
-    loop: {{ ec2_output.results }}
+    loop: "{{ ec2_output.results }}"
 
   - name: create R53 records
     amazon.aws.route53:
