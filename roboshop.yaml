@@ -19,4 +19,4 @@
   - name:
     debug:
       # msg: " {{ ec2_output | to_nice_yaml}}"
-      var: ec2_output
+      var: ec2_output.results
