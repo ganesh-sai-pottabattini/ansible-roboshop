@@ -41,7 +41,7 @@
     when: item.item != "frontend"
 
 
-  - name: create R53 records
+  - name: create R53 records for frontend
     amazon.aws.route53:
       state: present
       zone: "{{ domain_name }}"
