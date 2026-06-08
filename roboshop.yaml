@@ -5,6 +5,7 @@
   vars:
     instances: [ "mongodb", "redis", "mysql", "rabbitmq" ]
     image_id: ami-0220d79f3f480ecf5
+    domain_name: trivikram.online
   tasks:
   - name : Creating EC2 instances
     loop: "{{ instances }}"
@@ -22,7 +23,32 @@
       #msg: " {{ ec2_output.results }}"
       var: ec2_output.results
 
-  #- name: create route 53 record
-  #  debug: 
-  #    msg: " Instance Name : {{ item }}
-  #  loop: {{ ec2_output.results }}
+  - name: create route 53 record
+    debug: 
+      msg: " Instance Name : {{ item.item }} Private IP: {{ item.Instances[0].private_ip_address }} "
+    loop: {{ ec2_output.results }}
+
+  - name: create R53 records
+    amazon.aws.route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "{{ item.item }}.{{ domain_name }}"
+      type: A
+      value: "{{ item.Instances[0].private_ip_address }}"
+      ttl: 1
+      overwrite: true # old records ni overwrite chesthundi
+    loop: "{{ ec2_output.results }}"
+    when: item.item != "frontend"
+
+
+  - name: create R53 records
+    amazon.aws.route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "{{ domain_name }}"
+      type: A
+      value: "{{ item.Instances[0].public_ip_address }}"
+      ttl: 1
+      overwrite: true # old records ni overwrite chesthundi
+    loop: "{{ ec2_output.results }}"
+    when: item.item == "frontend"
