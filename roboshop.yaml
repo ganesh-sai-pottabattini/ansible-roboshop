@@ -28,7 +28,7 @@
   - name: Print Instance Name
     debug: 
       msg: " Instance Name : {{ item.item }} Private IP: {{ item.instances[0].private_ip_address }} "
-    loop: "{{ ec2_output.results }}"
+    loop: "{{ ec2_output.results.item }}"
 
   - name: create R53 records
     amazon.aws.route53:
@@ -40,7 +40,9 @@
       ttl: 1
       overwrite: true # old records ni overwrite chesthundi
     loop: "{{ ec2_output.results }}"
-    when: item.item != "frontend"
+    when: 
+    - item.item != "frontend"
+    - action == "create"
 
 
   - name: create R53 records for frontend
