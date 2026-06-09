@@ -2,6 +2,10 @@
   hosts: rabbitmq
   become: yes
   tasks:
+  - name: Change hostname
+    hostname:
+      name: rabbitmq.trivikram.online
+
   - name: Setup the RabbitMQ repo file
     copy: 
       src: rabbitmq.repo

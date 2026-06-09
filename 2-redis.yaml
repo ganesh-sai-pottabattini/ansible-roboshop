@@ -2,6 +2,10 @@
   hosts: redis
   become: yes
   tasks:
+  - name: Change hostname
+    hostname:
+      name: redis.trivikram.online
+
   - name: Disabling default redis 6
     dnf:
       name: redis

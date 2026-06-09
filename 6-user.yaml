@@ -1,0 +1,9 @@
+- name: Configure User service in Backend
+  hosts: user
+  become: yes
+  tasks:
+  - name: Change hostname
+    hostname:
+      name: user.trivikram.online
+
+  - name: 

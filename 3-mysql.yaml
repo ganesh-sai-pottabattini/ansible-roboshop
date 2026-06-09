@@ -2,6 +2,10 @@
   hosts: mysql
   become: yes
   tasks:
+  - name: Change hostname
+    hostname:
+      name: mysql.trivikram.online
+
   - name: Install MySQL Server
     dnf:
       name: mysql-server

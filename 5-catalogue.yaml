@@ -1,0 +1,104 @@
+- name: Configuring catalogue service setup
+  hosts: catalogue
+  become: yes
+  tasks:
+  - name: Change hostname
+    hostname:
+      name: catalogue.trivikram.online
+      
+  - name: Disable current module
+    dnf:
+      name: nodejs
+      state: disabled
+  
+  - name: Enable required module - nodejs:20
+    dnf:
+      name: nodejs:20
+      state: enabled
+  
+  - name: Install NodeJS
+    package:
+      name: nodejs
+      state: present
+
+  - name: Add application User - system
+    user:
+      name: roboshop
+      system: true
+      path: /app
+      shell: /sbin/nologin
+      comment: roboshop system user
+    
+  - name: Remove directory if it exists 
+    file:
+      path: /app
+      state: absent
+
+  - name: delete .zip file in /app directory
+    file:
+      name: /tmp/catalogue.zip
+      state: absent
+
+  - name : Create directory /app
+    file:
+      name: /app
+      state: directory
+  
+  - name:
+    get_url:
+      url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
+      dest: /tmp/
+    
+  - name: unzip catalogue.zip file
+    unarchive:
+      src: /tmp/
+      dest: /app
+      remote_src: yes
+  
+  - name: Download the dependencies
+    community.general.npm:
+      path: /app
+  - name:
+    template:
+      src: catalogue.service.j2
+      dest: /etc/systemd/system/catalogue.service
+
+  - name: copy mongo.repo
+    copy: 
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
+
+  - name: Install mongodb-client
+    package:
+      name: mongodb-mongosh
+      state: present
+
+  - name: Check schema exists or not in mongodb
+    shell: mongosh --host "{{ MONGODB_HOST }}" --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
+    register: catalogue_output
+    tags:
+      -mongodb
+  
+  - name: print catalogue_output
+    debug: 
+      msg: "{{ catalogue_output }}"
+    tags:
+      -mongodb
+  
+  - name: Load the data / products
+    shell: mongosh --host "{{ MONGODB_HOST }}" </app/db/master-data.js
+    when: catalogue.output.stdout | int < 0
+    tags:
+      - mongodb
+
+  - name: systemd reload
+    systemd_service:
+      name: catalogue
+      daemon_reload: true
+    when: unit_file.changed
+
+  - name: Start and Enable the service
+    service:
+      name: catalogue
+      state: restarted # stop and starts the service no matter what
+
