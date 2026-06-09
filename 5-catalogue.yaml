@@ -103,6 +103,3 @@
     systemd_service:
       name: catalogue
       daemon_reload: true
-    when: service_file.changed
-    tags:
-      - system-reload
