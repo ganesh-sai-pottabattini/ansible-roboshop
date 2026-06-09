@@ -11,10 +11,8 @@
       name: redis
       state: removed
   
-  - name: Enable redis 7 version
-    dnf:
-      name: redis:7
-      state: installed
+  - name: enable redis 7
+    command: dnf module enable redis:7 -y
     tags:
       redis
 
