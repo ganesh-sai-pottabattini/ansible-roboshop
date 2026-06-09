@@ -5,16 +5,14 @@
   - name: Change hostname
     hostname:
       name: catalogue.trivikram.online
-      
+
   - name: Disable current module
     dnf:
       name: nodejs
-      state: disabled
+      state: removed
   
-  - name: Enable required module - nodejs:20
-    dnf:
-      name: nodejs:20
-      state: enabled
+  - name: enable nodejs 20
+    command: dnf module enable nodejs:20 -y
   
   - name: Install NodeJS
     package:
