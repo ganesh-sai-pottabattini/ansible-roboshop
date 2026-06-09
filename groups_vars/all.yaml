@@ -1,2 +1,11 @@
-ansible_user=ec2-ansible_user
-ansible_password=DevOps321
+ansible_user: ec2-ansible_user
+ansible_password: DevOps321
+MONGODB_HOST: mongodb.trivikram.online
+REDIS_HOST: redis.trivikram.online
+MYSQL_HOST: mysql.trivikram.online 
+RABBITMQ_HOST: rabbitmq.trivikram.online 
+CATALOGUE_HOST: catalogue.trivikram.online
+USER_HOST: user.trivikram.online
+CART_HOST: cart.trivikram.online
+SHIPPING_HOST: shipping.trivikram.online
+PAYMENT_HOST: payment.trivikram.online

@@ -1,5 +1,6 @@
 {
-    "ec2_output.results": [        {
+    "ec2_output.results": [        
+        {
             "ansible_loop_var": "item",
             "changed": false,
             "changes": [],
