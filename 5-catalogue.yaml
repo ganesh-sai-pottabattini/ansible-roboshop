@@ -95,7 +95,7 @@
     systemd_service:
       name: catalogue
       daemon_reload: true
-    when: catalogue.service.changed
+    when: catalogue.service_file.changed
     tags:
       - system-reload
 
