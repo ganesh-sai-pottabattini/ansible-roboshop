@@ -10,13 +10,13 @@
     dnf:
       name: redis
       state: removed
-    tags:
-      redis
   
   - name: Enable redis 7 version
     dnf:
       name: redis:7
       state: installed
+    tags:
+      redis
 
   - name: Installing Redis 
     package:
