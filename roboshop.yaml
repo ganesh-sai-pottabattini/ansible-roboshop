@@ -7,6 +7,7 @@
     image_id: ami-0220d79f3f480ecf5
     domain_name: trivikram.online
     action: create
+
   tasks:
   - name : Creating EC2 instances
     loop: "{{ instances }}"
@@ -20,10 +21,10 @@
     register: ec2_output
     when: action == "create"
 
-  - name:
-    debug:
+  #- name:
+    #debug:
       #msg: " {{ ec2_output.results }}"
-      var: ec2_output.results
+      #var: ec2_output.results
 
   #- name: Print Instance Name
     #debug: 
