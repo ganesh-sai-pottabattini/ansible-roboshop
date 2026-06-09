@@ -88,7 +88,7 @@
     shell: mongosh --host "{{ MONGODB_HOST }}" < /app/db/master-data.js
     when: catalogue_output.stdout | int < 0
     tags:
-      -mongodb
+      - mongodb
 
   - name: Start and Enable the service
     service:
