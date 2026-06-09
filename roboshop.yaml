@@ -41,9 +41,7 @@
       ttl: 1
       overwrite: true # old records ni overwrite chesthundi
     loop: "{{ ec2_output.results }}"
-    when: 
-    - item.item != "frontend"
-    - action == "create"
+    when: action == "create"
 
 
   - name: create R53 records for frontend
@@ -56,7 +54,9 @@
       ttl: 1
       overwrite: true # old records ni overwrite chesthundi
     loop: "{{ ec2_output.results }}"
-    when: item.item == "frontend"
+    when: 
+    - item.item != "frontend"
+    - action == "create"
 
   - name: delete R53 record
     amazon.aws.route53:
