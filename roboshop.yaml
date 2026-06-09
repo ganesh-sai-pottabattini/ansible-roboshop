@@ -6,6 +6,7 @@
     instances: [ "mongodb", "redis", "mysql", "rabbitmq" ]
     image_id: ami-0220d79f3f480ecf5
     domain_name: trivikram.online
+    action: create
   tasks:
   - name : Creating EC2 instances
     loop: "{{ instances }}"
@@ -16,14 +17,15 @@
       security_groups: 
       - "{{item}}"
       - common
-    register: ec2_output 
+    register: ec2_output
+    when: action == "create"
 
   - name:
     debug:
       #msg: " {{ ec2_output.results }}"
       var: ec2_output.results
 
-  - name: create route 53 record
+  - name: Print Instance Name
     debug: 
       msg: " Instance Name : {{ item.item }} Private IP: {{ item.instances[0].private_ip_address }} "
     loop: "{{ ec2_output.results }}"
@@ -32,7 +34,7 @@
     amazon.aws.route53:
       state: present
       zone: "{{ domain_name }}"
-      record: "{{ item.item }}.{{ domain_name }}"
+      record: "{{ item.item }}.{{ domain_name }}" #mongodb.trivikram.online
       type: A
       value: "{{ item.instances[0].private_ip_address }}"
       ttl: 1
@@ -45,10 +47,38 @@
     amazon.aws.route53:
       state: present
       zone: "{{ domain_name }}"
-      record: "{{ domain_name }}"
+      record: "{{ domain_name }}" # trivikram.online
       type: A
       value: "{{ item.instances[0].public_ip_address }}"
       ttl: 1
       overwrite: true # old records ni overwrite chesthundi
     loop: "{{ ec2_output.results }}"
     when: item.item == "frontend"
+
+  - name: delete R53 record
+    amazon.aws.route53:
+      state: absent
+      record: "{{ item }}.{{ domain_name }}" 
+      type: A
+      ttl: 1
+    loop: "{{ instances }}"
+    when: action == "delete"
+
+  - name: delete R53 records for frontend
+    amazon.aws.route53:
+      state: absent
+      record: "{{ domain_name }}"
+      type: A
+      ttl: 1
+    loop: "{{ instances }}"
+    when: 
+    - action == "delete"
+    - item == "frontend"
+
+  - name: delete EC2 instances
+    amazon.aws.ec2_instance:
+      state: absent
+      name: "{{ item }}"
+      wait: false
+    loop: "{{ instances }}"
+    when: action == "delete"
