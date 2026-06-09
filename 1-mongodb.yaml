@@ -4,8 +4,8 @@
   become: yes
   tasks:
   - name: Change hostname
-    ansible.builtin.hostname:
-    name: mongodb.trivikram.online
+    hostname:
+      name: mongodb.trivikram.online
 
   - name:  copy the mongodb repo file
     copy:
