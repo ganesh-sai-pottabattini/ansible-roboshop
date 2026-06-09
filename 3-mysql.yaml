@@ -1,0 +1,14 @@
+- name: Configuring mySQL Server
+  hosts: mysql
+  become: yes
+  tasks:
+  - name: Install MySQL Server
+    dnf:
+      name: mysql-server
+      state: present
+
+  - name: Start and Enable MySQL Service
+    service:
+      name: mysqld
+      state: started
+      enabled: yes
