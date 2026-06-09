@@ -58,10 +58,12 @@
   - name: Download the dependencies
     community.general.npm:
       path: /app
+      
   - name:
     template:
       src: catalogue.service.j2
       dest: /etc/systemd/system/catalogue.service
+    notify: system reload
 
   - name: copy mongo.repo
     copy: 
@@ -91,6 +93,12 @@
     tags:
       - mongodb
 
+  - name: Start and Enable the service
+    service:
+      name: catalogue
+      state: restarted # stop and starts the service no matter what
+
+  handlers:
   - name: systemd reload
     systemd_service:
       name: catalogue
@@ -98,9 +106,3 @@
     when: service_file.changed
     tags:
       - system-reload
-
-  - name: Start and Enable the service
-    service:
-      name: catalogue
-      state: restarted # stop and starts the service no matter what
-
