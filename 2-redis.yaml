@@ -16,7 +16,7 @@
   - name: Enable redis 7 version
     dnf:
       name: redis:7
-      state: enabled
+      state: installed
 
   - name: Installing Redis 
     package:
