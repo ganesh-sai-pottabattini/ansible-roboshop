@@ -9,7 +9,9 @@
   - name: Disabling default redis 6
     dnf:
       name: redis
-      state: disabled
+      state: removed
+    tags:
+      redis
   
   - name: Enable redis 7 version
     dnf:
