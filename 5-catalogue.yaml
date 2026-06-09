@@ -96,6 +96,8 @@
       name: catalogue
       daemon_reload: true
     when: catalogue.service.changed
+    tags:
+      - system-reload
 
   - name: Start and Enable the service
     service:
