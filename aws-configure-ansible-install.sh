@@ -33,6 +33,7 @@ ansible --version
 echo " ========= mk folder , chng ownershop and permissions ==================================================================================== "
 
 sudo mkdir /var/log/roboshop/
+sudo touch /var/log/roboshop/ansible.log
 sudo chown -R ec2-user:ec2-user /var/log/roboshop/ansible.log
 sudo chmod 777 -R /var/log/roboshop/ansible.log
 
