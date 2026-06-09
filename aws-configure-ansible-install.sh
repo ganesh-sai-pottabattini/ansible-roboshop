@@ -34,7 +34,7 @@ echo " ========= mk folder , chng ownershop and permissions ====================
 
 sudo mkdir /var/log/roboshop/
 sudo chown -R ec2-user:ec2-user /var/log/roboshop/ansible.log
-sudo chmod 755 -R /var/log/roboshop/ansible.log
+sudo chmod 777 -R /var/log/roboshop/ansible.log
 
 #read -p "Access Key: " ACCESS_KEY
 # read -s -p "Secret Key: " SECRET_KEY
