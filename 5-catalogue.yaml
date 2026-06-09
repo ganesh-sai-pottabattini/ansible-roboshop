@@ -49,7 +49,7 @@
     
   - name: unzip catalogue.zip file
     unarchive:
-      src: /tmp/
+      src: /tmp/catalogue.zip
       dest: /app
       remote_src: yes
   
