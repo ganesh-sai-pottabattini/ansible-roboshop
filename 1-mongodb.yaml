@@ -1,0 +1,26 @@
+# make sure the mongodb SG allows ansible's SG 
+- name: Configuring mongodb server
+  hosts: mongodb
+  become: yes
+  tasks:
+  - name:  copy the mongodb repo file
+    copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
+
+  - name: Install the mongodb package
+    package:
+      name:  mongodb-org
+      state: present
+  
+  - name: Update listen address from 127.0.0.1 to 0.0.0.0 in /etc/mongod.conf
+    replace:
+      path: /etc/mongod.conf
+      regexp: '127.0.0.1'
+      replace: '0.0.0.0'
+
+  - name: Start & Enable MongoDB Service
+    service:
+      name: mongod
+      state: started
+      enabled: yes
