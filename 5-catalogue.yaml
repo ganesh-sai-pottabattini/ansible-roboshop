@@ -26,15 +26,17 @@
       home: /app
       shell: /sbin/nologin
       comment: roboshop system user
+    tags:
+      - catalogue
     
   - name: Remove directory if it exists 
     file:
       path: /app
       state: absent
 
-  - name: delete .zip file in /app directory
+  - name: delete .zip file in /app directory if it exists
     file:
-      name: /tmp/catalogue.zip
+      name: /tmp/catalogue-v3.zip
       state: absent
 
   - name : Create directory /app
