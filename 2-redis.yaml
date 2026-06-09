@@ -1,10 +1,9 @@
-# Installing Redis
 - name: Configuring Redis Server
   hosts: redis
   become: yes
   tasks:
   - name: Disabling default redis 6
-    command:
+    dnf:
       name: redis
       state: disabled
   
