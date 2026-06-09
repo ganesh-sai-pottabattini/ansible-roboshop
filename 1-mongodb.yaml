@@ -3,6 +3,10 @@
   hosts: mongodb
   become: yes
   tasks:
+  - name: Change hostname
+    ansible.builtin.hostname:
+    name: mongodb.trivikram.online
+
   - name:  copy the mongodb repo file
     copy:
       src: mongo.repo
