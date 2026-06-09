@@ -60,6 +60,7 @@
 
   - name: delete R53 record
     amazon.aws.route53:
+      zone: "{{ domain_name }}"
       state: absent
       record: "{{ item }}.{{ domain_name }}" 
       type: A
@@ -69,6 +70,7 @@
 
   - name: delete R53 records for frontend
     amazon.aws.route53:
+      zone: "{{ domain_name }}"
       state: absent
       record: "{{ domain_name }}"
       type: A
@@ -80,7 +82,6 @@
 
   - name: delete EC2 instances
     amazon.aws.ec2_instance:
-      zone: "{{ domain_name }}"
       state: absent
       name: "{{ item }}"
       wait: false
