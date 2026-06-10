@@ -1,0 +1,95 @@
+- name: Configuring ShippING Service
+  hosts: shipping
+  become: yes
+
+  tasks:
+
+  - name: Change hostname to shipping
+    hostname:
+      name: shipping.trivikram.online
+      
+  - name: Install maven
+    package: 
+      name: "{{ item }}"
+      state: present
+      loop:
+      - maven
+      - mysql
+
+  - name: create roboshop system user
+    user:
+      name: roboshop
+      system: true
+      home: /app
+      shell: /sbin/nologin
+      comment: "Roboshop System user for Shipping"
+
+  - name: remove app directory
+    file:
+      path: /app
+      state: absent
+
+  - name: delete shipping.zip in tmp directory
+    file:
+      path: /tmp/shipping.zip
+      state: absent
+
+  - name: create app directory
+    file:
+      path: /app
+      state: directory
+
+  - name: download shipping
+    get_url:
+      url: https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip 
+      dest: /tmp/shipping.zip
+
+  - name: unzip shipping
+    unarchive:
+      src: /tmp/shipping.zip
+      dest: /app
+      remote_src: yes
+
+  - name:
+    command: mvn clean package
+    args:
+      chdir: /app
+
+  - name:
+    command: mv target/shipping-1.0.jar shipping.jar
+    args:
+      chdir: /app
+
+  - name:
+    template:
+      src: shipping.service.j2
+      dest: /etc/systemd/system/shipping.service
+
+  - name:
+    pip:
+      name: PyMySQL
+      executable: pip3.9
+  
+  - name: Load Schema, Create app user, Load Master Data 
+    community.mysql.mysql_db:
+      state: import
+      name: all
+      login_user: root
+      login_password: RoboShop@1
+      login_host: "{{ MYSQL_HOST }}"
+      target: "{{ item }}"
+      loop:
+      - /app/db/schema.sql
+      - /app/db/app-user.sql 
+      - /app/db/master-data.sql
+
+  - name: deamon reload
+    systemd_service:
+      name: shipping
+      daemon_reload: true
+
+  - name: Start and Enable service
+    service: 
+      name: shipping
+      state: restarted
+      enabled: yes

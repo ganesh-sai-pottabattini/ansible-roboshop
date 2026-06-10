@@ -6,4 +6,69 @@
     hostname:
       name: user.trivikram.online
 
-  - name: 
+  - name: Disable nodeJS v16 
+    name: nodejs
+    state: removed
+  
+  - name:
+    command: dnf module enable nodejs:20 -y
+
+  - name: Install nodejs
+    package:
+      name: nodejs
+      state: present
+  
+  - name: Add application User - system
+    user:
+      name: roboshop
+      home: /app
+      system: true
+      shell: /sbin/nologin
+      comment: roboshop system user for user
+
+  - name: Delete the directory of it exists
+    file:
+      path: /app
+      state: absent
+
+  - name: Delete the old file if it exists
+    file :
+      name: /tmp/user.zip
+      state: absent
+
+  - name: create a new /app directory
+    file: 
+      path: /app
+      state: directory
+  
+  - name: Download the code with url
+    get_url:
+      url: /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip
+      dest: /tmp/user.zip
+
+  - name: Unzip the file
+    unarchive:
+      src: /tmp/user.zip
+      dest: /app/
+      remote_src: true
+
+  - name: Download the dependencies
+    community.general.npm:
+      path: /app
+    
+  - name: Setup SystemD User Service
+    template:
+      src: user.service.j2
+      dest: /etc/systemd/system/user.service
+  
+  - name: SystemD Reload
+    systemd_service:
+      name: user
+      daemon_reload: true
+  
+  - name: Start and Enable User
+    service:
+      name: user
+      state: restarted
+      enabled: yes
+
