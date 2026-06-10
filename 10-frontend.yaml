@@ -46,8 +46,9 @@
       dest: /usr/share/nginx/html/
 
   - name: Delete the default nginx conf file
-    path: /etc/nginx/nginx.conf
-    state: absent
+    file:
+      path: /etc/nginx/nginx.conf
+      state: absent
 
   - name: copy the nginx conf file
     template:
