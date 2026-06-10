@@ -45,7 +45,7 @@
   
   - name: Download the code with url
     get_url:
-      url: /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip
+      url: https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip
       dest: /tmp/user.zip
 
   - name: Unzip the file
