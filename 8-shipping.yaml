@@ -1,4 +1,4 @@
-- name: Configuring ShippING Service
+- name: Configuring Shipping Service
   hosts: shipping
   become: yes
 
@@ -78,10 +78,10 @@
       login_password: RoboShop@1
       login_host: "{{ MYSQL_HOST }}"
       target: "{{ item }}"
-      loop:
-      - /app/db/schema.sql
-      - /app/db/app-user.sql 
-      - /app/db/master-data.sql
+    loop:
+    - /app/db/schema.sql
+    - /app/db/app-user.sql 
+    - /app/db/master-data.sql
 
   - name: deamon reload
     systemd_service:
