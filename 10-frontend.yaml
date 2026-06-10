@@ -44,6 +44,7 @@
     unarchive:
       src: /tmp/frontend.zip
       dest: /usr/share/nginx/html/
+      remote_src: yes
 
   - name: Delete the default nginx conf file
     file:
