@@ -7,14 +7,14 @@
   - name: Change hostname to shipping
     hostname:
       name: shipping.trivikram.online
-      
+
   - name: Install maven
     package: 
       name: "{{ item }}"
       state: present
-      loop:
-      - maven
-      - mysql
+    loop:
+    - maven
+    - mysql
 
   - name: create roboshop system user
     user:
