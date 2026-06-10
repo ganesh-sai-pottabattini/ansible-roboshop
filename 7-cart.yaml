@@ -8,8 +8,9 @@
       name: cart.trivikram.online
 
   - name: Disable nodeJS v16 
-    name: nodejs
-    state: removed
+    dnf:
+      name: nodejs
+      state: removed
 
   - name: enable nodejs 20
     command: dnf module enable nodejs:20 -y
