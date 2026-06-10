@@ -9,8 +9,8 @@
 
   - name: Disable nodeJS v16 
     dnf:
-    name: nodejs
-    state: removed
+      name: nodejs
+      state: removed
   
   - name:
     command: dnf module enable nodejs:20 -y
